@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
+import sys
 from pathlib import Path
 
-data_folder = Path(r"C:\Users\lovea\Documents\python\string-generator")
-file_to_open = data_folder / "grammar.txt"
+if len(sys.argv) <= 1:
+  print("Passe o caminho do arquivo de teste corretamente")
+  exit()
+file_to_open = sys.argv[1]
 
 with open(file_to_open) as file:
     Lines = file.readlines()
@@ -94,44 +97,24 @@ def validEntries():
 
 
 # FAST MODE
-
-def fast_mode2():
-    chain = ''
-    continue_fast_mode = True
-    while continue_fast_mode:
-        for key in productions.keys():
-            continue
-
-
-        print(chain)    
-        print("Cadeia gerada:")
-        print(chain_sub_str[len(chain_sub_str) - 1])  
-
-        print("\nDeseja gerar outra cadeia? (s/n)")
-        keep = input()
-        if keep.lower() != 's':
-            continue_fast_mode = False
-
-
-
-
-def fast_mode():
-    chain = ""
-    chain_path = []
-    chain_path.append("epsilon")
-    epsilon_possibility = None
+def fast_mode(): 
+    epsilon_possibility = []
+    for x in productions:
+        for y in productions[x]:
+            if y == "epsilon":
+                epsilon_possibility.append(x)
 
     continue_fast_mode = True
+    k = 0
     while continue_fast_mode:
-        for x in productions:
-            for y in productions[x]:
-                if y == "epsilon":
-                    chain_path.append(x)
-                    break
-            if len(chain_path) != 0:
-                break   
+        chain = ""
+        chain_path = []
+        chain_path.append("epsilon")
+        if k == len(epsilon_possibility):
+          k = 0
+        chain_path.append(epsilon_possibility[k])
+        k += 1
         i = 1
-
         while chain_path[i - 1] != initial_var:
             for x in productions:
                 for y in productions[x]:
@@ -171,16 +154,19 @@ def fast_mode():
         if keep.lower() != 's':
             continue_fast_mode = False
 
-
 # DETAILED MODE    
 def detailed_mode():
     chain_sub_str = initial_var + " -> "
     chain = chain_sub_str
-    current_variable = initial_var
+    current_variable = None
     print("Derivacao:")
     print(chain)    
 
-    while current_variable != "epsilon":
+    while any(j.isupper() for j in chain_sub_str):
+        for i in chain_sub_str:
+          if i.isupper():
+            current_variable = i
+            break
         print(f"\nEscolha a operacao de {current_variable}: ")
         print(productions[current_variable])
         operation = input()
@@ -192,27 +178,17 @@ def detailed_mode():
         if operacao_valida:
             match = re.search(r'(.*?)(?= ->)', chain_sub_str)
             if match:
-                if "epsilon" in operation:
-                    aux = ""
-                    aux = match.group(0).replace(current_variable, aux, 1)
-                    chain_sub_str = aux
-                else:
-                    aux = match.group(0).replace(current_variable, operation, 1)
-                    chain_sub_str = aux + " -> "
+                if operation == "epsilon":
+                  operation = ""
+                aux = match.group(0).replace(current_variable, operation, 1)
+                chain_sub_str = aux + " -> "
                 chain += chain_sub_str
                 print(chain)
-            if operation == "epsilon":
-                current_variable = operation
-            else:
-                for x in variables:
-                    if x in operation:
-                        current_variable = x
-                        break
         else:
             print("Operacao invalida!") 
 
     print("\nCadeia gerada:")
-    print(chain_sub_str)    
+    print(chain_sub_str[:-4])    
 
 
 # MENU 
