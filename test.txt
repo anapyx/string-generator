@@ -1,0 +1,18 @@
+variaveis:S,X,Y,Z
+inicial:S
+terminais:a,b,c,d
+
+producoes
+S: aX
+S: aY
+S: bY
+S: bZ
+X: S
+X: cX
+X: epsilon
+Y: S
+Y: dX
+Y: epsilon
+Z: S
+Z: dY
+Z: epsilon
