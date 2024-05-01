@@ -1,8 +1,11 @@
 import re
+import sys
 from pathlib import Path
 
-#data_folder = Path(r"C:\Users\lovea\Documents\python\string-generator")
-file_to_open = "test.txt"
+if len(sys.argv) <= 1:
+  print("Passe o caminho do arquivo de teste corretamente")
+  exit()
+file_to_open = sys.argv[1]
 
 with open(file_to_open) as file:
     Lines = file.readlines()
