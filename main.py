@@ -90,24 +90,26 @@ print(validation)
 print(validation_flags)
 
 # FAST MODE
+def fast_mode(): 
+    epsilon_possibility = []
+    for x in productions:
+        for y in productions[x]:
+            if y == "epsilon":
+                epsilon_possibility.append(x)
 
-
-def fast_mode():
+    print(len(epsilon_possibility))
     continue_fast_mode = True
+    k = 0
     while continue_fast_mode:
         chain = ""
         chain_path = []
         chain_path.append("epsilon")
-        epsilon_possibility = None
-        for x in productions:
-            for y in productions[x]:
-                if y == "epsilon":
-                    chain_path.append(x)
-                    break
-            if len(chain_path) != 0:
-                break   
+        if k == len(epsilon_possibility):
+          k = 0
+        print(k)
+        chain_path.append(epsilon_possibility[k])
+        k += 1
         i = 1
-
         while chain_path[i - 1] != initial_var:
             for x in productions:
                 for y in productions[x]:
@@ -146,7 +148,6 @@ def fast_mode():
         keep = input()
         if keep.lower() != 's':
             continue_fast_mode = False
-
 
 # DETAILED MODE    
 def detailed_mode():
