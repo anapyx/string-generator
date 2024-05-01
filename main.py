@@ -97,7 +97,6 @@ def fast_mode():
             if y == "epsilon":
                 epsilon_possibility.append(x)
 
-    print(len(epsilon_possibility))
     continue_fast_mode = True
     k = 0
     while continue_fast_mode:
@@ -106,7 +105,6 @@ def fast_mode():
         chain_path.append("epsilon")
         if k == len(epsilon_possibility):
           k = 0
-        print(k)
         chain_path.append(epsilon_possibility[k])
         k += 1
         i = 1
