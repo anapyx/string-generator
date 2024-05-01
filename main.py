@@ -1,8 +1,8 @@
 import re
 from pathlib import Path
 
-data_folder = Path(r"C:\Users\lovea\Documents\python\string-generator")
-file_to_open = data_folder / "grammar.txt"
+#data_folder = Path(r"C:\Users\lovea\Documents\python\string-generator")
+file_to_open = "test.txt"
 
 with open(file_to_open) as file:
     Lines = file.readlines()
@@ -90,13 +90,12 @@ print(validation_flags)
 
 
 def fast_mode():
-    chain = ""
-    chain_path = []
-    chain_path.append("epsilon")
-    epsilon_possibility = None
-
     continue_fast_mode = True
     while continue_fast_mode:
+        chain = ""
+        chain_path = []
+        chain_path.append("epsilon")
+        epsilon_possibility = None
         for x in productions:
             for y in productions[x]:
                 if y == "epsilon":
@@ -150,11 +149,15 @@ def fast_mode():
 def detailed_mode():
     chain_sub_str = initial_var + " -> "
     chain = chain_sub_str
-    current_variable = initial_var
+    current_variable = None
     print("Derivacao:")
     print(chain)    
 
-    while current_variable != "epsilon":
+    while any(j.isupper() for j in chain_sub_str):
+        for i in chain_sub_str:
+          if i.isupper():
+            current_variable = i
+            break
         print(f"\nEscolha a operacao de {current_variable}: ")
         print(productions[current_variable])
         operation = input()
@@ -166,27 +169,17 @@ def detailed_mode():
         if operacao_valida:
             match = re.search(r'(.*?)(?= ->)', chain_sub_str)
             if match:
-                if "epsilon" in operation:
-                    aux = ""
-                    aux = match.group(0).replace(current_variable, aux, 1)
-                    chain_sub_str = aux
-                else:
-                    aux = match.group(0).replace(current_variable, operation, 1)
-                    chain_sub_str = aux + " -> "
+                if operation == "epsilon":
+                  operation = ""
+                aux = match.group(0).replace(current_variable, operation, 1)
+                chain_sub_str = aux + " -> "
                 chain += chain_sub_str
                 print(chain)
-            if operation == "epsilon":
-                current_variable = operation
-            else:
-                for x in variables:
-                    if x in operation:
-                        current_variable = x
-                        break
         else:
             print("Operacao invalida!") 
 
     print("\nCadeia gerada:")
-    print(chain_sub_str)    
+    print(chain_sub_str[:-4])    
 
 
 # MENU 
@@ -208,5 +201,3 @@ while running:
         detailed_mode()
     if menu == '3':
        running = False
-
-
