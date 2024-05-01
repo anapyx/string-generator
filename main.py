@@ -69,7 +69,7 @@ def fast_mode():
     epsilon_possibility = None
 
     continue_fast_mode = True
-    while True:
+    while continue_fast_mode:
         for x in productions:
           for y in productions[x]:
             if y == "epsilon":
@@ -125,36 +125,38 @@ def detailed_mode():
     current_variable = initial_var
     print("Derivacao:")
     print(chain)    
+
     while current_variable != "epsilon":
-      print(f"\nEscolha a operacao de {current_variable}: ")
-      print(productions[current_variable])
-      operation = input()
-      operacao_valida = False
-      for x in productions[current_variable]:
-        if operation in x:
-          operacao_valida = True
-          break
-      if operacao_valida:
-        match = re.search(r'(.*?)(?= ->)', chain_sub_str)
-        if match:
-          if "epsilon" in operation:
-            aux = ""
-            aux = match.group(0).replace(current_variable, aux, 1)
-            chain_sub_str = aux
+        print(f"\nEscolha a operacao de {current_variable}: ")
+        print(productions[current_variable])
+        operation = input()
+        operacao_valida = False
+        for x in productions[current_variable]:
+          if operation in x:
+            operacao_valida = True
+            break
+        if operacao_valida:
+          match = re.search(r'(.*?)(?= ->)', chain_sub_str)
+          if match:
+            if "epsilon" in operation:
+              aux = ""
+              aux = match.group(0).replace(current_variable, aux, 1)
+              chain_sub_str = aux
+            else:
+              aux = match.group(0).replace(current_variable, operation, 1)
+              chain_sub_str = aux + " -> "
+            chain += chain_sub_str
+            print(chain)
+          if operation == "epsilon":
+            current_variable = operation
           else:
-            aux = match.group(0).replace(current_variable, operation, 1)
-            chain_sub_str = aux + " -> "
-          chain += chain_sub_str
-          print(chain)
-        if operation == "epsilon":
-          current_variable = operation
+            for x in variables:
+              if x in operation:
+                current_variable = x
+                break
         else:
-          for x in variables:
-            if x in operation:
-              current_variable = x
-              break
-      else:
-        print("Operacao invalida!") 
+            print("Operacao invalida!") 
+
     print("\nCadeia gerada:")
     print(chain_sub_str)    
 
