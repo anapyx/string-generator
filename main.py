@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 from pathlib import Path
 
@@ -9,9 +10,6 @@ with open(file_to_open) as file:
 
 Lines.remove('\n')
 Lines.remove('producoes\n')
-
-print('leu o arquivo')
-print(Lines)
 
 prod_list = [] 
 variables = None # list with non terminals symbols
@@ -43,12 +41,6 @@ for line in Lines:
     elif line:
         prod_list.append(line.strip())
 
-print('separou as partes')
-print(variables)
-print(initial_var)
-print(prod_list)
-
-
 prod_list = tuple(prod_list)
 
 for prod in prod_list:
@@ -57,36 +49,70 @@ for prod in prod_list:
         productions.setdefault(prod[0], [])
         productions[prod[0]].append(prod[1])
 
-print('gerou producoes')
-print(productions)
 
 def validEntries():
-    flags = []
     output = True
 
     if len(variables) < 1:
-       flags.append(1)
+       print('Erro nas variaveis.')
        output = False
+    else:
+        for i in variables:
+            if i.isalpha() and i.isupper():
+                continue
+            else:
+                print('Erro nas variaveis.')
+                output = False
 
-    if (not initial_var.isalpha()) and (not(initial_var in variables)) and (not len(initial_var) == 1):
-       flags.append(2)
+    if (not initial_var.isalpha()) and (not initial_var.isupper()) and (not(initial_var in variables)) and (not len(initial_var) == 1):
+       print('Erro no nao terminal inicial.')
        output = False
 
     if len(terminals) < 1:
-       flags.append(3)
+       print('Erro nos terminais.')
+    else:
+        for i in terminals:
+            if (i.isalpha() and i.islower()) or i.isdigit:
+                continue
+            else:
+                print('Erro nos terminais.')
+                output = False
 
+    keylist = []
     for key in productions.keys():
-       if key not in variables:
-          flags.append(4)
-          output = False
+        keylist.append(key)
+        if key not in variables:
+            print('Nao terminal do lado esquerdo nao presente em variaveis declaradas.')
+            output = False
 
-    return output, flags
+    if len(keylist) != len(variables):
+        print('Erro nas produções.')
+        output = False
 
-validation, validation_flags = validEntries()
-print(validation)
-print(validation_flags)
+
+    return output
+
 
 # FAST MODE
+
+def fast_mode2():
+    chain = ''
+    continue_fast_mode = True
+    while continue_fast_mode:
+        for key in productions.keys():
+            continue
+
+
+        print(chain)    
+        print("Cadeia gerada:")
+        print(chain_sub_str[len(chain_sub_str) - 1])  
+
+        print("\nDeseja gerar outra cadeia? (s/n)")
+        keep = input()
+        if keep.lower() != 's':
+            continue_fast_mode = False
+
+
 
 
 def fast_mode():
@@ -193,20 +219,30 @@ def detailed_mode():
 
 running = True
 while running:
-    print('\n----- Gerador de Gramáticas Livres de Contexto -----\n')
-    print('Selecione o path do seu arquivo e escolha o modo do gerador:')
-    print('1. Modo rapido')
-    print('2. Modo detalhado')
-    print('3. Sair')
-    menu = input()
+    print('\n----- Gerador de Cadeias para Gramáticas Livres de Contexto -----\n')
 
-    if menu == '1':
-        print ('\n--- Modo Rápido ---')
-        fast_mode()
-    if menu == '2':
-        print ('\n--- Modo Detalhado ---')
-        detailed_mode()
-    if menu == '3':
-       running = False
+    validation = validEntries()
 
+    if validation == True:
+        print('Producoes:')
+        print(productions)
+        print('\nSelecione o modo como a GLC gera:')
+        print('1. Modo rapido')
+        print('2. Modo detalhado')
+        print('3. Sair')
+
+        menu = input()
+
+        if menu == '1':
+            print ('\n--- Modo Rápido ---')
+            fast_mode()
+        if menu == '2':
+            print ('\n--- Modo Detalhado ---')
+            detailed_mode()
+        if menu == '3':
+           running = False
+
+    else:
+        print('Existem erros no arquivo de entrada!')
+        running = False
 
