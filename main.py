@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 
 data_folder = Path(r"C:\Users\lovea\Documents\python\string-generator")
-file_to_open = data_folder / "test.txt"
+file_to_open = data_folder / "grammar.txt"
 
 with open(file_to_open) as file:
     Lines = file.readlines()
@@ -53,13 +53,12 @@ for prod in prod_list:
 # FAST MODE
 
 def fast_mode():
-    variables, initial_var, terminals, production_dictionary = read_inst_file("test.txt")   
     chain = ""
     chain_path = []
     chain_path.append("epsilon")
     epsilon_possibility = None  
-    for x in production_dictionary:
-      for y in production_dictionary[x]:
+    for x in productions:
+      for y in productions[x]:
         if y == "epsilon":
           chain_path.append(x)
           break
@@ -67,8 +66,8 @@ def fast_mode():
         break   
     i = 1
     while chain_path[i - 1] != initial_var:
-      for x in production_dictionary:
-        for y in production_dictionary[x]:
+      for x in productions:
+        for y in productions[x]:
           if chain_path[i - 1] in y:
             chain_path.append(x)
             i += 1
@@ -81,7 +80,7 @@ def fast_mode():
     chain += chain_sub_str[0]
     j = 0
     for i in range(len(chain_path)-1, 0, -1):
-      for x in production_dictionary[chain_path[i]]:
+      for x in productions[chain_path[i]]:
         if chain_path[i - 1] in x:
           match = re.search(r'(.*?)(?= ->)', chain_sub_str[j])
           if match:
@@ -101,7 +100,6 @@ def fast_mode():
 
 # DETAILED MODE    
 def detailed_mode():
-    variables, initial_var, terminals, production_dictionary = read_inst_file("test.txt")   
     chain_sub_str = initial_var + " -> "
     chain = chain_sub_str
     current_variable = initial_var
@@ -109,10 +107,10 @@ def detailed_mode():
     print(chain)    
     while current_variable != "epsilon":
       print(f"Escolha a operacao de {current_variable}: ")
-      print(production_dictionary[current_variable])
+      print(productions[current_variable])
       operation = input()
       operacao_valida = False
-      for x in production_dictionary[current_variable]:
+      for x in productions[current_variable]:
         if operation in x:
           operacao_valida = True
           break
@@ -145,9 +143,9 @@ def detailed_mode():
 
 running = True
 while running:
-    print('----- Gerador de Gramáticas Livres de Contexto -----\n')
+    print('\n----- Gerador de Gramáticas Livres de Contexto -----\n')
     print('Selecione o path do seu arquivo e escolha o modo do gerador:')
-    print('1. Modo rápido')
+    print('1. Modo rapido')
     print('2. Modo detalhado')
     print('3. Sair')
     menu = input()
