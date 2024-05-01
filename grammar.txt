@@ -8,5 +8,5 @@ S: 1B
 S: epsilon
 A: 1S
 A: 0AA
-B: 0S
-B: 1BB
+B: 0S
+B: 1BB

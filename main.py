@@ -10,8 +10,11 @@ with open(file_to_open) as file:
 Lines.remove('\n')
 Lines.remove('producoes\n')
 
+print('leu o arquivo')
+print(Lines)
+
 prod_list = [] 
-variables = None # list with non terminal symbols
+variables = None # list with non terminals symbols
 initial_var = None
 terminals = None
 productions = {}
@@ -33,12 +36,17 @@ for line in Lines:
         initial_var = initial_var.replace(':','')
 
     elif line.startswith('terminais'):
-        terminal = line.strip()
-        terminal = terminal.replace('terminais','')
-        terminal = terminal.replace(':','')
-        terminal = terminal.split(',')
+        terminals = line.strip()
+        terminals = terminals.replace('terminais','')
+        terminals = terminals.replace(':','')
+        terminals = terminals.split(',')
     elif line:
         prod_list.append(line.strip())
+
+print('separou as partes')
+print(variables)
+print(initial_var)
+print(prod_list)
 
 
 prod_list = tuple(prod_list)
@@ -49,7 +57,8 @@ for prod in prod_list:
         productions.setdefault(prod[0], [])
         productions[prod[0]].append(prod[1])
 
-
+print('gerou producoes')
+print(productions)
 # FAST MODE
 
 def fast_mode():
@@ -106,7 +115,7 @@ def detailed_mode():
     print("Derivacao:")
     print(chain)    
     while current_variable != "epsilon":
-      print(f"Escolha a operacao de {current_variable}: ")
+      print(f"\nEscolha a operacao de {current_variable}: ")
       print(productions[current_variable])
       operation = input()
       operacao_valida = False
