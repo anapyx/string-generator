@@ -179,7 +179,7 @@ def detailed_mode():
             match = re.search(r'(.*?)(?= ->)', chain_sub_str)
             if match:
                 if operation == "epsilon":
-                  operation = ""
+                    operation = ""
                 aux = match.group(0).replace(current_variable, operation, 1)
                 chain_sub_str = aux + " -> "
                 chain += chain_sub_str
