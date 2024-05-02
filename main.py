@@ -97,33 +97,45 @@ def validEntries():
 
 
 # FAST MODE
-def fast_mode(): 
-    epsilon_possibility = []
+
+def fast_mode():
+    chain_possibility = []
+    ends_possibility = []
     for x in productions:
         for y in productions[x]:
             if y == "epsilon":
-                epsilon_possibility.append(x)
+                chain_possibility.append(x)
+                ends_possibility.append(y)
+                continue
+
+            is_end_possibility = True
+            for i in y:
+                if i in variables:
+                  is_end_possibility = False
+            if is_end_possibility:
+                chain_possibility.append(x)
+                ends_possibility.append(y)
 
     continue_fast_mode = True
     k = 0
     while continue_fast_mode:
         chain = ""
         chain_path = []
-        chain_path.append("epsilon")
-        if k == len(epsilon_possibility):
+        if k == len(chain_possibility):
           k = 0
-        chain_path.append(epsilon_possibility[k])
+        chain_path.append(ends_possibility[k])
+        chain_path.append(chain_possibility[k])
         k += 1
         i = 1
-        while chain_path[i - 1] != initial_var:
+        while chain_path[i] != initial_var:
             for x in productions:
                 for y in productions[x]:
-                    if chain_path[i - 1] in y:
+                    if chain_path[i] in y:
                         chain_path.append(x)
                         i += 1
                         break
-                if chain_path[i - 1] == initial_var:
-                    break 
+                if chain_path[i] == initial_var:
+                    break
 
         print("Derivacao:")
         chain_sub_str = []
@@ -135,34 +147,33 @@ def fast_mode():
                 if chain_path[i - 1] in x:
                     match = re.search(r'(.*?)(?= ->)', chain_sub_str[j])
                     if match:
-                        if "epsilon" in x:
+                        if "epsilon" == x:
                             x = ""
-                            aux = match.group(0).replace(chain_path[i], x, 1)
-                            chain_sub_str.append(aux)
-                        else:
-                            aux = match.group(0).replace(chain_path[i], x, 1)
-                            chain_sub_str.append(aux + " -> ")
+                        aux = match.group(0).replace(chain_path[i], x, 1)
+                        chain_sub_str.append(aux + " -> ")
                         j += 1
-                        chain += chain_sub_str[j]   
+                        chain += chain_sub_str[j]
+                    break;
 
-        print(chain)    
+        print(chain[:-4])
         print("Cadeia gerada:")
-        print(chain_sub_str[len(chain_sub_str) - 1])  
+        print(chain_sub_str[len(chain_sub_str) - 1][:-4])
 
         print("\nDeseja gerar outra cadeia? (s/n)")
         keep = input()
         if keep.lower() != 's':
             continue_fast_mode = False
 
-# DETAILED MODE    
+
+# DETAILED MODE
 def detailed_mode():
     chain_sub_str = initial_var + " -> "
     chain = chain_sub_str
     current_variable = None
     print("Derivacao:")
-    print(chain)    
+    print(chain)
 
-    while any(j.isupper() for j in chain_sub_str):
+    while any(j in variables for j in chain_sub_str):
         for i in chain_sub_str:
           if i.isupper():
             current_variable = i
@@ -179,16 +190,16 @@ def detailed_mode():
             match = re.search(r'(.*?)(?= ->)', chain_sub_str)
             if match:
                 if operation == "epsilon":
-                    operation = ""
+                  operation = ""
                 aux = match.group(0).replace(current_variable, operation, 1)
                 chain_sub_str = aux + " -> "
                 chain += chain_sub_str
-                print(chain)
+                print(chain[:-4])
         else:
-            print("Operacao invalida!") 
+            print("Operacao invalida!")
 
     print("\nCadeia gerada:")
-    print(chain_sub_str[:-4])    
+    print(chain_sub_str[:-4])
 
 
 # MENU 
