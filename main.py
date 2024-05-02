@@ -4,8 +4,8 @@ import sys
 from pathlib import Path
 
 if len(sys.argv) <= 1:
-  print("Passe o caminho do arquivo de teste corretamente")
-  exit()
+    print("Passe o caminho do arquivo de teste corretamente.")
+    exit()
 file_to_open = sys.argv[1]
 
 with open(file_to_open) as file:
@@ -44,6 +44,25 @@ for line in Lines:
     elif line:
         prod_list.append(line.strip())
 
+
+# Verifying if all characters in productions are valid
+
+for prod in prod_list:
+    test_prod = prod.split(':')
+    print(test_prod)
+    
+    for item in test_prod:
+        if item == 'epsilon' or (item in variables) or (item in terminals):
+            continue
+        else:
+            for char in item:
+                if char == ':' or (char in variables) or (char in terminals):
+                    continue
+                else:
+                    print('Erro nas escrita das producoes.')
+                    exit()
+
+
 prod_list = tuple(prod_list)
 
 for prod in prod_list:
@@ -51,7 +70,6 @@ for prod in prod_list:
         prod = prod.split(':')
         productions.setdefault(prod[0], [])
         productions[prod[0]].append(prod[1])
-
 
 def validEntries():
     output = True
@@ -92,8 +110,25 @@ def validEntries():
         print('Erro nas produções.')
         output = False
 
-
     return output
+
+
+def fast_mode2():
+    continue_fast_mode = True
+
+    while continue_fast_mode:
+        for value in productions[initial_var]:
+            print(value)
+
+        #print(chain)    
+        print("Cadeia gerada:")
+        #print(chain_sub_str[len(chain_sub_str) - 1])  
+
+        print("\nDeseja gerar outra cadeia? (s/n)")
+        keep = input()
+        if keep.lower() != 's':
+            continue_fast_mode = False
+
 
 
 # FAST MODE
@@ -111,7 +146,7 @@ def fast_mode():
         chain_path = []
         chain_path.append("epsilon")
         if k == len(epsilon_possibility):
-          k = 0
+            k = 0
         chain_path.append(epsilon_possibility[k])
         k += 1
         i = 1
@@ -211,7 +246,7 @@ while running:
 
         if menu == '1':
             print ('\n--- Modo Rápido ---')
-            fast_mode()
+            fast_mode2()
         if menu == '2':
             print ('\n--- Modo Detalhado ---')
             detailed_mode()
