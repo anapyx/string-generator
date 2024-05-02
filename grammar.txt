@@ -9,4 +9,4 @@ S: epsilon
 A: 1S
 A: 0AA
 B: 0S
-B: 1BBn
+B: 1BB

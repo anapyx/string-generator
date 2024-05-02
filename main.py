@@ -19,7 +19,6 @@ variables = None # list with non terminals symbols
 initial_var = None
 terminals = None
 productions = {}
-start_read_productions = False
 
 # get variables from file
 
@@ -43,6 +42,8 @@ for line in Lines:
         terminals = terminals.split(',')
     elif line:
         prod_list.append(line.strip())
+    else:
+        continue
 
 
 # Verifying if all characters in productions are valid
