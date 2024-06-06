@@ -45,9 +45,9 @@ for line in Lines:
     else:
         continue
 
-
 # Verifying if all characters in productions are valid
-
+# turn off when it has ascii problems
+'''
 for prod in prod_list:
     test_prod = prod.split(':')
     for item in test_prod:
@@ -58,9 +58,11 @@ for prod in prod_list:
                 if char == ':' or (char in variables) or (char in terminals):
                     continue
                 else:
+                    print(char)
                     print('Erro nas escrita das producoes.')
                     exit()
 
+'''
 
 prod_list = tuple(prod_list)
 
@@ -221,7 +223,7 @@ def detailed_mode():
 
 running = True
 while running:
-    print('\n----- Gerador de Cadeias para Gramáticas Livres de Contexto -----\n')
+    print('\n----- Gerador de Cadeias para Gramaticas Livres de Contexto -----\n')
 
     validation = validEntries()
 
@@ -236,7 +238,7 @@ while running:
         menu = input()
 
         if menu == '1':
-            print ('\n--- Modo Rápido ---')
+            print ('\n--- Modo Rapido ---')
             fast_mode()
         if menu == '2':
             print ('\n--- Modo Detalhado ---')
@@ -247,4 +249,3 @@ while running:
     else:
         print('Existem erros no arquivo de entrada!')
         running = False
-

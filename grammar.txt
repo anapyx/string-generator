@@ -1,12 +1,18 @@
-variaveis:S,A,B
+variaveis:S,X,Y,Z
 inicial:S
 terminais:0,1
 
 producoes
-S: 0A
-S: 1B
-S: epsilon
-A: 1S
-A: 0AA
-B: 0S
-B: 1BB
+S: 0X
+S: 1Y
+S: 0Y
+S: 1Z
+X: S
+X: 00X
+X: epsilon
+Y: S
+Y: 11X
+Y: epsilon
+Z: S
+Z: 01Y
+Z: epsilon
